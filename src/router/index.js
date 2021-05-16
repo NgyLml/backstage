@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import container from "../components/container";
+import Container from "../components/Container";
 
 Vue.use(VueRouter)
 
@@ -12,8 +12,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/container',
-    component: container
+    path: '/Container',
+    name: 'Container',
+    component: Container
   }
 ]
 
