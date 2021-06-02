@@ -5,6 +5,8 @@ import './plugins/element.js'
 import store from './store'
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
+import md5 from 'js-md5';
+Vue.prototype.$md5 = md5;
 
 Vue.config.productionTip = false
 

@@ -26,7 +26,7 @@ const routes = [{
       {
         path: '/Articles',
         component: Articles,
-        name: '文章内容',
+        name: '文章',
         hidden: true
       }]
   }

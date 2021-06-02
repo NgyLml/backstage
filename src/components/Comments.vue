@@ -1,16 +1,29 @@
 <template>
-    <el-table :data="result" border style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80"></el-table-column>
-        <el-table-column prop="article_id" label="文章ID" width="80"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="100"></el-table-column>
-        <el-table-column prop="content" label="评论内容" width="600"></el-table-column>
-        <el-table-column prop="time" label="评论时间" :formatter="dateFormat" width="160"></el-table-column>
-        <el-table-column label="操作" width="100">
-            <template slot-scope="scope">
-                <el-button type="danger" size="small" @click="commentsDelete(scope.row)">删除</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+    <div>
+        <el-table :data="result.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
+            <el-table-column prop="id" label="ID" width="80"></el-table-column>
+            <el-table-column prop="article_id" label="文章ID" width="80"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="100"></el-table-column>
+            <el-table-column prop="content" label="评论内容" width="600"></el-table-column>
+            <el-table-column prop="time" label="评论时间" :formatter="dateFormat" width="160"></el-table-column>
+            <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                    <el-button type="danger" size="small" @click="commentsDelete(scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+                layout="total, sizes, prev, pager, next, jumper"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="pagesize"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :pager-count="5"
+                :total="result.length">
+        </el-pagination>
+    </div>
 </template>
 
 <script>
@@ -26,6 +39,14 @@
             })
         },
         methods: {
+            handleSizeChange: function (size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+            },
+            handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+            },
             dateFormat:function(row,column){
                 let date = row[column.property];
                 if(date == undefined){
@@ -67,7 +88,9 @@
                     name: '',
                     content: '',
                     time: ''
-                }
+                },
+                currentPage: 1,
+                pagesize: 5,
             }
         }
     }

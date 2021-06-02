@@ -8,6 +8,25 @@
             <el-input v-model="result.username"></el-input>
         </el-form-item>
 
+        <el-form-item label="密码">
+            <el-input placeholder="请输入密码" v-model="result.password" show-password style="width:800px"></el-input>
+
+            <el-button type="text" @click="dialogFormVisible = true">修改密码</el-button>
+            <el-dialog title="修改界面" :visible.sync="dialogFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="新的密码" :label-width="formLabelWidth">
+                        <el-input v-model="form.password" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+<!--                    <el-button type="primary" @click="dialogFormVisible = false">确定修改</el-button>-->
+                    <el-button type="primary" @click="replacePassword(),dialogFormVisible = false">确定修改</el-button>
+                </div>
+            </el-dialog>
+
+        </el-form-item>
+
         <el-form-item label="性别">
             <el-select v-model="result.sex" placeholder="请选择您的性别">
                 <el-option label="男" value="男"></el-option>
@@ -64,11 +83,14 @@
 
     import {getHomeData} from "../network/home";
     import axios from 'axios';
+    //没有此设置，vue不会自动帮我们保存后端传来的cookie!
+    axios.defaults.withCredentials = true;
 
     export default {
         created() {
             getHomeData().then(res => {
                 console.log(res);
+                console.log(res.username)
                 this.result = res;
             })
         },
@@ -77,13 +99,19 @@
                 result: {
                     username: '',
                     sex: '',
+                    password: '',
                     birthday: '',
                     email: '',
                     address: '',
                     phone: '',
                     career: '',
                     info: ''
-                }
+                },
+                dialogFormVisible: false,
+                form: {
+                    password: ''
+                },
+                formLabelWidth: '120px'
             }
         },
         methods: {
@@ -105,6 +133,15 @@
                         })
                     }
                 });
+            },
+            replacePassword() {
+                const pwd = this.form.password;
+                const newPwd = this.$md5(pwd)
+                console.log(this.$md5(pwd));
+                // $("#password").val($.md5(pwd));
+                console.log(this.form.password);
+                this.result.password = newPwd;
+                alert("修改成功")
             }
         }
     }
